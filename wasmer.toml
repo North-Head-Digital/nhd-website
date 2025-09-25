@@ -1,0 +1,35 @@
+[package]
+name = "nhd-website"
+version = "1.0.0"
+description = "North Head Digital - AI Solutions Website"
+license = "MIT"
+repository = "https://github.com/rileyaschoff/nhd-website"
+
+[package.authors]
+authors = ["rileyaschoff"]
+
+[dependencies]
+
+[web]
+# Static website configuration
+static = true
+# Entry point for the website
+index = "nhd-website.html"
+# Directory to serve files from
+dir = "."
+
+[build]
+# No build process needed for static HTML
+build = ""
+
+[[web.routes]]
+path = "/"
+file = "nhd-website.html"
+
+[[web.routes]]
+path = "/index"
+file = "public/index.html"
+
+[[web.routes]]
+path = "/*"
+file = "nhd-website.html"

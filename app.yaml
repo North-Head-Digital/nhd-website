@@ -1,0 +1,27 @@
+name: NorthHeadDigital
+app_id: da_n73IatAUNrNx
+owner: rileyaschoff
+package: sha256:573ca478fa68ce370bb5676e3221af30efcf17a04b322e0b4deba3eb3878f9ec
+cli_args:
+- '--root'
+- public
+- '--directory-listing'
+- 'true'
+- '--port'
+- '80'
+- '--host'
+- '::'
+kind: wasmer.io/App.v0
+version: v3.1.0
+static:
+  index: index.html
+  path: public
+env_vars:
+- name: WASMER_GRAPHQL_URL
+  value: https://registry.wasmer.io/graphql
+- name: WASMER_APP_ID
+  value: da_n73IatAUNrNx
+- name: WASMER_APP_URL
+  value: https://northheaddigital.wasmer.app
+web_gateway:
+  force_https: true
