@@ -1,0 +1,17 @@
+{
+  "name": "nhd-website",
+  "version": "1.0.0",
+  "description": "North Head Digital Website with Integrated Client Portal",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
+    "build-portal": "cd ../NHD-Client_Portal && npm run build && cp -r dist/* ../NHD-Website/public/portal/app/",
+    "test": "echo 'Visit http://localhost:3000/test-integration.html to test the integration'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

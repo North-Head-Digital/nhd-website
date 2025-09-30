@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal - North Head Digital</title>
+    <meta name="description" content="Access your North Head Digital client portal for project management, analytics, and communication.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◆</text></svg>">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .portal-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .portal-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .portal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .portal-description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .portal-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .portal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-logo">◆ North Head Digital</div>
+        <h1 class="portal-title">Client Portal</h1>
+        <p class="portal-description">
+            Access your project dashboard, analytics, and communication tools. 
+            Please log in to continue to your personalized portal.
+        </p>
+        
+        <!-- Login Form (shown when not authenticated) -->
+        <div id="loginForm" style="display: none;">
+            <form id="authForm" style="text-align: left; max-width: 300px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label for="email" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Email</label>
+                    <input type="email" id="email" name="email" required autocomplete="email"
+                           style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label for="password" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password"
+                           style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                <button type="submit" class="portal-button" style="width: 100%; margin-bottom: 15px;">
+                    <span class="loading-spinner" id="loginSpinner" style="display: none;"></span>
+                    <span id="loginButtonText">Login</span>
+                </button>
+                <div id="loginError" style="color: #e74c3c; font-size: 14px; margin-bottom: 15px; display: none;"></div>
+            </form>
+            
+            <!-- Registration Form (hidden by default) -->
+            <div id="registerForm" style="display: none;">
+                <form id="registerAuthForm" style="text-align: left; max-width: 300px; margin: 0 auto;">
+                    <div style="margin-bottom: 15px;">
+                        <label for="regName" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Full Name</label>
+                        <input type="text" id="regName" name="name" required autocomplete="name"
+                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="regEmail" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Email</label>
+                        <input type="email" id="regEmail" name="email" required autocomplete="email"
+                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="regCompany" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Company</label>
+                        <input type="text" id="regCompany" name="company" required autocomplete="organization"
+                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label for="regPassword" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Password</label>
+                        <input type="password" id="regPassword" name="password" required autocomplete="new-password"
+                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <button type="submit" class="portal-button" style="width: 100%; margin-bottom: 15px;">
+                        <span class="loading-spinner" id="registerSpinner" style="display: none;"></span>
+                        <span id="registerButtonText">Create Account</span>
+                    </button>
+                    <div id="registerError" style="color: #e74c3c; font-size: 14px; margin-bottom: 15px; display: none;"></div>
+                </form>
+            </div>
+            
+            <!-- Toggle between login and register -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="button" id="toggleAuth" style="background: none; border: none; color: #667eea; text-decoration: underline; cursor: pointer; font-size: 14px;">
+                    Don't have an account? Create one
+                </button>
+            </div>
+        </div>
+
+        <!-- Portal Button (shown when authenticated) -->
+        <a href="/portal/app/" class="portal-button" id="portalButton" style="display: none;">
+            <span class="loading-spinner" id="loadingSpinner"></span>
+            <span id="buttonText">Enter Portal</span>
+        </a>
+        
+        <div>
+            <a href="/" class="back-link">← Back to Main Website</a>
+        </div>
+    </div>
+    
+    <script>
+        // Add loading state when clicking the portal button
+        document.getElementById('portalButton').addEventListener('click', function(e) {
+            const button = this;
+            const spinner = document.getElementById('loadingSpinner');
+            const text = document.getElementById('buttonText');
+            
+            // Show loading state
+            spinner.style.display = 'inline-block';
+            text.textContent = 'Loading...';
+            button.style.pointerEvents = 'none';
+            
+            // Allow the natural redirect to happen
+            // The loading state provides visual feedback
+        });
+
+        // Check authentication status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+            setupAuthToggle();
+        });
+
+        function setupAuthToggle() {
+            const toggleButton = document.getElementById('toggleAuth');
+            const loginForm = document.getElementById('authForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            let isLoginMode = true;
+            
+            toggleButton.addEventListener('click', function() {
+                if (isLoginMode) {
+                    // Switch to register
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                    toggleButton.textContent = 'Already have an account? Sign in';
+                    isLoginMode = false;
+                } else {
+                    // Switch to login
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    toggleButton.textContent = 'Don\'t have an account? Create one';
+                    isLoginMode = true;
+                }
+            });
+        }
+
+        function updateUI() {
+            const loginForm = document.getElementById('loginForm');
+            const portalButton = document.getElementById('portalButton');
+            
+            // Check for real authentication token
+            const token = localStorage.getItem('nhd_auth_token');
+            const userData = localStorage.getItem('nhd_user_data');
+            
+            if (token && userData) {
+                // User is authenticated, show portal button
+                if (loginForm) loginForm.style.display = 'none';
+                if (portalButton) portalButton.style.display = 'inline-block';
+            } else {
+                // User not authenticated, show login form
+                if (loginForm) loginForm.style.display = 'block';
+                if (portalButton) portalButton.style.display = 'none';
+            }
+        }
+
+        // Environment-aware API configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : 'https://api.northheaddigital.com';
+
+        // Handle login form submission
+        document.getElementById('authForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const spinner = document.getElementById('loginSpinner');
+            const buttonText = document.getElementById('loginButtonText');
+            const errorDiv = document.getElementById('loginError');
+
+            // Show loading state
+            spinner.style.display = 'inline-block';
+            buttonText.textContent = 'Logging in...';
+            errorDiv.style.display = 'none';
+
+            try {
+                // Use the real API system (same as React app)
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store the real token and user data
+                    localStorage.setItem('nhd_auth_token', data.token);
+                    localStorage.setItem('nhd_user_data', JSON.stringify(data.user));
+                    
+                    // Update UI and redirect to portal
+                    updateUI();
+                    window.location.href = '/portal/app/';
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Login failed');
+                }
+            } catch (error) {
+                // Show error
+                errorDiv.textContent = error.message || 'Login failed. Please try again.';
+                errorDiv.style.display = 'block';
+                buttonText.textContent = 'Login';
+                spinner.style.display = 'none';
+            }
+        });
+
+        // Handle registration form submission
+        document.getElementById('registerAuthForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const company = document.getElementById('regCompany').value;
+            const password = document.getElementById('regPassword').value;
+            const spinner = document.getElementById('registerSpinner');
+            const buttonText = document.getElementById('registerButtonText');
+            const errorDiv = document.getElementById('registerError');
+            
+            // Show loading state
+            spinner.style.display = 'inline-block';
+            buttonText.textContent = 'Creating account...';
+            errorDiv.style.display = 'none';
+            
+            try {
+                // Use the real API system for registration
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, company, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store the real token and user data
+                    localStorage.setItem('nhd_auth_token', data.token);
+                    localStorage.setItem('nhd_user_data', JSON.stringify(data.user));
+                    
+                    // Update UI and redirect to portal
+                    updateUI();
+                    window.location.href = '/portal/app/';
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Registration failed');
+                }
+            } catch (error) {
+                // Show error
+                errorDiv.textContent = error.message || 'Registration failed. Please try again.';
+                errorDiv.style.display = 'block';
+                buttonText.textContent = 'Create Account';
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

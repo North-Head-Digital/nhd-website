@@ -12,7 +12,20 @@
   # Node.js version
   NODE_VERSION = "18"
 
-# Redirect rules for SPA-like behavior
+# Redirect rules for routing
+# Handle portal routes
+[[redirects]]
+  from = "/portal"
+  to = "/portal.html"
+  status = 200
+
+# Handle portal app routes (for React app)
+[[redirects]]
+  from = "/portal/app/*"
+  to = "/portal/app/index.html"
+  status = 200
+
+# Default redirect for other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"

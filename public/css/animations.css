@@ -1,0 +1,448 @@
+/**
+ * North Head Digital - Animation Styles
+ * All keyframe animations, transitions, and motion effects
+ */
+
+/* ===== LOGO ANIMATIONS ===== */
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1); 
+    }
+    50% { 
+        transform: scale(1.1); 
+    }
+}
+
+/* ===== BACKGROUND ANIMATIONS ===== */
+
+@keyframes meshMove {
+    0%, 100% { 
+        transform: translate(0, 0); 
+    }
+    25% { 
+        transform: translate(-5%, -5%); 
+    }
+    50% { 
+        transform: translate(5%, -5%); 
+    }
+    75% { 
+        transform: translate(-5%, 5%); 
+    }
+}
+
+@keyframes float-particle {
+    from {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    to {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===== ORB ANIMATIONS ===== */
+
+@keyframes orbFloat {
+    0%, 100% { 
+        transform: translate(0, 0) scale(1);
+    }
+    33% { 
+        transform: translate(50px, -50px) scale(1.1);
+    }
+    66% { 
+        transform: translate(-30px, 30px) scale(0.9);
+    }
+}
+
+@keyframes orbPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes floatElement {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===== HERO VISUAL ANIMATIONS ===== */
+
+@keyframes lineGlow {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes circlePulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes squareFloat {
+    0%, 100% {
+        transform: rotate(45deg) translateY(0px);
+    }
+    50% {
+        transform: rotate(45deg) translateY(-20px);
+    }
+}
+
+/* ===== CASE STUDY ANIMATIONS ===== */
+
+@keyframes shimmer {
+    0% { 
+        transform: translateX(-100%) translateY(-100%) rotate(45deg); 
+    }
+    100% { 
+        transform: translateX(100%) translateY(100%) rotate(45deg); 
+    }
+}
+
+/* ===== CONTACT ANIMATIONS ===== */
+
+@keyframes pulse-slow {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 0.5; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1); 
+        opacity: 0.3; 
+    }
+}
+
+@keyframes scan {
+    0% { 
+        transform: translateY(0); 
+    }
+    100% { 
+        transform: translateY(350px); 
+    }
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== LOADING ANIMATIONS ===== */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== GLOW EFFECTS ===== */
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.5),
+                   0 0 40px rgba(102, 126, 234, 0.3),
+                   0 0 60px rgba(102, 126, 234, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(102, 126, 234, 0.7),
+                   0 0 60px rgba(102, 126, 234, 0.5),
+                   0 0 90px rgba(102, 126, 234, 0.3);
+    }
+}
+
+/* ===== ANIMATION UTILITY CLASSES ===== */
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.animate-on-scroll.visible {
+    animation: fadeInUp 800ms var(--ease-out) forwards;
+}
+
+.slide-left {
+    opacity: 0;
+    transform: translateX(-60px);
+}
+
+.slide-left.visible {
+    animation: slideInLeft 800ms var(--ease-out) forwards;
+}
+
+.slide-right {
+    opacity: 0;
+    transform: translateX(60px);
+}
+
+.slide-right.visible {
+    animation: slideInRight 800ms var(--ease-out) forwards;
+}
+
+/* ===== PROGRESS STEP ANIMATIONS ===== */
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-step.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.progress-step:nth-child(1) { transition-delay: 0.1s; }
+.progress-step:nth-child(2) { transition-delay: 0.2s; }
+.progress-step:nth-child(3) { transition-delay: 0.3s; }
+
+/* ===== HERO ANIMATIONS ===== */
+
+.hero h1 {
+    margin-bottom: var(--space-xl);
+    opacity: 0;
+    animation: fadeInUp 1000ms ease forwards;
+}
+
+.hero-subtitle {
+    font-size: clamp(20px, 3vw, 24px);
+    color: var(--gray-400);
+    margin: 0 auto var(--space-3xl) auto;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeInUp 1000ms ease 200ms forwards;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeInUp 1000ms ease 400ms forwards;
+    justify-content: center;
+}
+
+/* ===== PARTICLE ANIMATIONS ===== */
+
+.particle {
+    position: absolute;
+    background: var(--primary);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.3;
+    animation: float-particle 20s infinite linear;
+}
+
+/* ===== ORB ANIMATIONS ===== */
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: orbFloat 30s infinite ease-in-out;
+    opacity: 0.6;
+    will-change: transform;
+}
+
+.orb-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--gradient-primary);
+    top: -300px;
+    right: -200px;
+    animation: orbFloat 25s infinite ease-in-out, orbPulse 8s infinite ease-in-out;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+    bottom: -200px;
+    left: -100px;
+    animation: orbFloat 35s infinite ease-in-out, orbPulse 12s infinite ease-in-out;
+    animation-delay: 10s;
+}
+
+.orb-3 {
+    width: 500px;
+    height: 500px;
+    background: var(--gradient-vibrant);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: orbFloat 30s infinite ease-in-out, orbPulse 10s infinite ease-in-out;
+    animation-delay: 20s;
+}
+
+/* ===== FLOATING ELEMENTS ===== */
+
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    animation: floatElement 20s infinite linear;
+    pointer-events: none;
+}
+
+.floating-element:nth-child(1) {
+    width: 20px;
+    height: 20px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+    width: 15px;
+    height: 15px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+.floating-element:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    top: 80%;
+    left: 20%;
+    animation-delay: 10s;
+}
+
+.floating-element:nth-child(4) {
+    width: 18px;
+    height: 18px;
+    top: 30%;
+    right: 30%;
+    animation-delay: 15s;
+}
+
+/* ===== HERO VISUAL ELEMENTS ===== */
+
+.hero-visual-1 {
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+    top: 20%;
+    left: 15%;
+    animation: lineGlow 3s infinite ease-in-out;
+}
+
+.hero-visual-2 {
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--secondary), transparent);
+    top: 40%;
+    right: 20%;
+    animation: lineGlow 3s infinite ease-in-out 1.5s;
+}
+
+.hero-visual-3 {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    top: 70%;
+    left: 25%;
+    animation: circlePulse 4s infinite ease-in-out;
+}
+
+.hero-visual-4 {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    border-radius: 8px;
+    top: 30%;
+    right: 35%;
+    animation: squareFloat 6s infinite ease-in-out;
+    transform: rotate(45deg);
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .orb,
+    .floating-element,
+    .particle,
+    .hero-visual {
+        animation: none !important;
+    }
+}
