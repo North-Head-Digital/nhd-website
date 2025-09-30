@@ -934,6 +934,64 @@
         .feature-link:hover svg {
             transform: translateX(4px);
         }
+
+        /* Clickable Feature Card Links */
+        .feature-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card-link:hover .feature-card {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3),
+                       0 8px 20px rgba(118, 75, 162, 0.2),
+                       inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card-link:hover .feature-card::before {
+            opacity: 0.05;
+        }
+
+        .feature-card-link:hover .feature-card::after {
+            left: 100%;
+            opacity: 1;
+        }
+
+        .feature-card-link:hover .feature-card h4 {
+            color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .feature-card-link:hover .feature-card p {
+            transform: translateY(-1px);
+        }
+
+        .feature-card-link:hover .feature-icon {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.5),
+                       inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-card-link:hover .feature-link {
+            gap: 12px;
+            color: var(--white);
+        }
+
+        .feature-card-link:hover .feature-link::after {
+            width: 100%;
+        }
+
+        .feature-card-link:hover .feature-link svg {
+            transform: translateX(4px);
+        }
         
         /* Pricing Section */
         .pricing {
