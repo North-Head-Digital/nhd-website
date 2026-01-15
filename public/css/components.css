@@ -919,8 +919,23 @@
 }
 
 .calendar-widget h4 {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
     color: var(--white);
+}
+
+.calendar-description {
+    color: var(--gray-400);
+    font-size: 14px;
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+
+.calendar-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .calendar-placeholder {
