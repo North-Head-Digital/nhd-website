@@ -4,9 +4,9 @@
 
 North Head Digital was born from a simple belief: artificial intelligence shouldn't be intimidating or out of reach for everyday businesses. 
 
-Our founder's journey into AI began with curiosity and self-directed learning—diving deep into computer science and artificial intelligence not through formal education, but through hands-on exploration and real-world application. This autodidactic approach means we understand AI from a practical, problem-solving perspective rather than just theoretical knowledge.
+Our founder's journey into AI began with curiosity and self-directed learning—diving deep into computer science and artificial intelligence through hands-on exploration and real-world application. Our engineering-first approach prioritizes practical, deployment-ready architectures over theoretical models. We build systems that work in production, not just in the lab.
 
-We're a family-owned company founded on the idea that powerful AI tools should be accessible, practical, and transformative for businesses of all sizes. Our self-taught foundation gives us a unique advantage: we speak business language, not just tech language.
+We are a specialized consultancy founded on the idea that powerful AI tools should be accessible, practical, and transformative for businesses of all sizes. Our hands-on foundation gives us a unique advantage: we speak business language, not just tech language.
 
 ## Who We Are
 
