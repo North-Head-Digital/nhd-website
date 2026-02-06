@@ -29,113 +29,179 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="css/styles.css">
+
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
         }
-        
+
+        main {
+            width: 100%;
+            padding: var(--space-xl);
+            display: flex;
+            justify-content: center;
+        }
+
         .portal-container {
-            background: white;
-            border-radius: 20px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
             text-align: center;
             max-width: 500px;
             width: 90%;
         }
-        
+
         .portal-logo {
             font-size: 2rem;
             font-weight: 800;
-            color: #667eea;
+            color: var(--primary);
             margin-bottom: 20px;
         }
-        
+
         .portal-title {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #333;
+            color: var(--dark);
+            background: none;
+            -webkit-text-fill-color: var(--dark);
+            background-clip: initial;
             margin-bottom: 10px;
         }
-        
+
         .portal-description {
-            color: #666;
+            color: var(--gray-600);
             margin-bottom: 30px;
             line-height: 1.6;
         }
-        
+
         .portal-button {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--gradient-primary);
+            color: var(--white);
             padding: 15px 30px;
-            border-radius: 50px;
+            border-radius: var(--radius-pill);
             text-decoration: none;
             font-weight: 600;
+            font-family: var(--font-primary);
+            font-size: var(--text-base);
+            border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: var(--shadow-sm);
         }
-        
+
+        .portal-button--full {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
         .portal-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
         }
-        
+
         .loading-spinner {
             display: inline-block;
             width: 20px;
             height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
+            border-radius: var(--radius-circle);
+            border-top-color: var(--white);
             animation: spin 1s ease-in-out infinite;
             margin-right: 10px;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
+
         .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
-        
+
         .back-link:hover {
-            color: #764ba2;
+            color: var(--secondary);
         }
 
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 10px;
-            background: #111827;
-            color: #fff;
-            padding: 10px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            z-index: 2000;
+        .portal-form {
+            text-align: left;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
-        .skip-link:focus {
-            top: 10px;
+        .portal-form-group {
+            margin-bottom: var(--space-lg);
         }
 
-        *:focus-visible {
-            outline: 3px solid #4338ca;
-            outline-offset: 2px;
+        .portal-form-group--sm {
+            margin-bottom: var(--space-md);
+        }
+
+        .portal-label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-weight: 500;
+            color: var(--dark);
+            font-size: var(--text-base);
+        }
+
+        .portal-input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-base);
+            font-family: var(--font-primary);
+            box-sizing: border-box;
+            color: var(--gray-800);
+            background: var(--white);
+        }
+
+        .portal-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-focus);
+        }
+
+        .portal-error {
+            color: var(--error);
+            font-size: var(--text-base);
+            margin-bottom: var(--space-md);
+        }
+
+        .portal-form-toggle {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .portal-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: var(--text-base);
+            font-family: var(--font-primary);
+        }
+
+        @media (max-width: 768px) {
+            .portal-container {
+                padding: 28px;
+            }
         }
     </style>
 </head>
@@ -152,58 +218,58 @@
         
         <!-- Login Form (shown when not authenticated) -->
         <div id="loginForm" style="display: none;">
-            <form id="authForm" style="text-align: left; max-width: 300px; margin: 0 auto;">
-                <div style="margin-bottom: 20px;">
-                    <label for="email" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Email</label>
+            <form id="authForm" class="portal-form">
+                <div class="portal-form-group">
+                    <label for="email" class="portal-label">Email</label>
                     <input type="email" id="email" name="email" required autocomplete="email"
-                           style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                           class="portal-input">
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="password" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Password</label>
+                <div class="portal-form-group">
+                    <label for="password" class="portal-label">Password</label>
                     <input type="password" id="password" name="password" required autocomplete="current-password"
-                           style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                           class="portal-input">
                 </div>
-                <button type="submit" class="portal-button" style="width: 100%; margin-bottom: 15px;">
+                <button type="submit" class="portal-button portal-button--full">
                     <span class="loading-spinner" id="loginSpinner" style="display: none;"></span>
                     <span id="loginButtonText">Login</span>
                 </button>
-                <div id="loginError" role="alert" aria-live="polite" style="color: #e74c3c; font-size: 14px; margin-bottom: 15px; display: none;"></div>
+                <div id="loginError" class="portal-error" role="alert" aria-live="polite" style="display: none;"></div>
             </form>
             
             <!-- Registration Form (hidden by default) -->
             <div id="registerForm" style="display: none;">
-                <form id="registerAuthForm" style="text-align: left; max-width: 300px; margin: 0 auto;">
-                    <div style="margin-bottom: 15px;">
-                        <label for="regName" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Full Name</label>
+                <form id="registerAuthForm" class="portal-form">
+                    <div class="portal-form-group portal-form-group--sm">
+                        <label for="regName" class="portal-label">Full Name</label>
                         <input type="text" id="regName" name="name" required autocomplete="name"
-                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               class="portal-input">
                     </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="regEmail" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Email</label>
+                    <div class="portal-form-group portal-form-group--sm">
+                        <label for="regEmail" class="portal-label">Email</label>
                         <input type="email" id="regEmail" name="email" required autocomplete="email"
-                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               class="portal-input">
                     </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="regCompany" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Company</label>
+                    <div class="portal-form-group portal-form-group--sm">
+                        <label for="regCompany" class="portal-label">Company</label>
                         <input type="text" id="regCompany" name="company" required autocomplete="organization"
-                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               class="portal-input">
                     </div>
-                    <div style="margin-bottom: 20px;">
-                        <label for="regPassword" style="display: block; margin-bottom: 5px; font-weight: 500; color: #333;">Password</label>
+                    <div class="portal-form-group">
+                        <label for="regPassword" class="portal-label">Password</label>
                         <input type="password" id="regPassword" name="password" required autocomplete="new-password"
-                               style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               class="portal-input">
                     </div>
-                    <button type="submit" class="portal-button" style="width: 100%; margin-bottom: 15px;">
+                    <button type="submit" class="portal-button portal-button--full">
                         <span class="loading-spinner" id="registerSpinner" style="display: none;"></span>
                         <span id="registerButtonText">Create Account</span>
                     </button>
-                    <div id="registerError" role="alert" aria-live="polite" style="color: #e74c3c; font-size: 14px; margin-bottom: 15px; display: none;"></div>
+                    <div id="registerError" class="portal-error" role="alert" aria-live="polite" style="display: none;"></div>
                 </form>
             </div>
             
             <!-- Toggle between login and register -->
-            <div style="text-align: center; margin-top: 20px;">
-                <button type="button" id="toggleAuth" style="background: none; border: none; color: #667eea; text-decoration: underline; cursor: pointer; font-size: 14px;">
+            <div class="portal-form-toggle">
+                <button type="button" id="toggleAuth" class="portal-toggle">
                     Don't have an account? Create one
                 </button>
             </div>
