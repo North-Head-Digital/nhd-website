@@ -60,7 +60,7 @@
         
         html {
             scroll-behavior: smooth;
-            cursor: none;
+            cursor: auto;
         }
         
         body {
@@ -70,7 +70,7 @@
             color: var(--gray-600);
             background: var(--dark);
             overflow-x: hidden;
-            cursor: none;
+            cursor: auto;
         }
         
         /* Custom Cursor */
@@ -190,7 +190,7 @@
             text-decoration: none;
             border: none;
             border-radius: 50px;
-            cursor: none;
+            cursor: pointer;
             transition: all 400ms var(--elastic);
             position: relative;
             overflow: hidden;
@@ -309,7 +309,7 @@
             color: var(--white);
             text-decoration: none;
             position: relative;
-            cursor: none;
+            cursor: pointer;
             white-space: nowrap;
             margin-right: var(--space-2xl);
         }
@@ -342,7 +342,7 @@
             transition: all 300ms ease;
             padding: 8px 0;
             position: relative;
-            cursor: none;
+            cursor: pointer;
         }
         
         .nav-link::before {
@@ -900,7 +900,7 @@
             gap: 8px;
             transition: all 300ms ease;
             position: relative;
-            cursor: none;
+            cursor: pointer;
         }
         
         .feature-link::after {
@@ -2249,7 +2249,7 @@
             border-radius: 50px;
             color: var(--gray-400);
             font-weight: 500;
-            cursor: none;
+            cursor: pointer;
             transition: all 400ms var(--ease-out);
             min-height: 44px;
             backdrop-filter: blur(10px);
@@ -2529,6 +2529,25 @@
             min-height: 140px;
             resize: vertical;
             font-family: inherit;
+        }
+
+        .form-status {
+            margin-top: var(--space-md);
+            font-size: 14px;
+            min-height: 21px;
+            line-height: 1.5;
+        }
+
+        .form-status.is-loading {
+            color: var(--gray-400);
+        }
+
+        .form-status.is-success {
+            color: var(--success);
+        }
+
+        .form-status.is-error {
+            color: var(--error);
         }
         
         /* Futuristic contact info cards */
@@ -2865,7 +2884,7 @@
         }
 
         .newsletter-form input::placeholder {
-            color: var(--gray-500);
+            color: var(--gray-400);
         }
 
         .newsletter-form button {
@@ -2890,6 +2909,25 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .newsletter-status {
+            margin-top: var(--space-sm);
+            font-size: 13px;
+            min-height: 18px;
+            line-height: 1.4;
+        }
+
+        .newsletter-status.is-loading {
+            color: var(--gray-400);
+        }
+
+        .newsletter-status.is-success {
+            color: var(--success);
+        }
+
+        .newsletter-status.is-error {
+            color: var(--error);
         }
 
         .newsletter-privacy {
@@ -3103,4 +3141,170 @@
         
         body:has(.pricing) .pricing {
             background: linear-gradient(180deg, var(--dark) 0%, #0F1218 100%);
+        }
+
+        /* Second Pass: Visual Polish Overrides */
+        :root {
+            --content-max-width: 1120px;
+            --radius-md: 14px;
+            --radius-lg: 18px;
+            --section-padding: clamp(56px, 8vw, 96px);
+        }
+
+        .container {
+            max-width: var(--content-max-width);
+        }
+
+        h1 {
+            font-size: clamp(38px, 7vw, 68px);
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(30px, 5vw, 46px);
+            line-height: 1.15;
+            margin-bottom: var(--space-md);
+        }
+
+        h3 {
+            font-size: clamp(24px, 3.8vw, 34px);
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1.02rem;
+            line-height: 1.65;
+            max-width: 68ch;
+        }
+
+        .hero {
+            min-height: 88vh;
+            padding: 116px 0 var(--section-padding);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 2.4vw, 22px);
+            margin-bottom: var(--space-2xl);
+            max-width: 64ch;
+        }
+
+        .hero-buttons {
+            gap: var(--space-md);
+        }
+
+        .services,
+        .industries,
+        .methodology,
+        .about,
+        .pricing,
+        .contact,
+        .case-studies {
+            padding: var(--section-padding) 0;
+        }
+
+        .section-header {
+            margin-bottom: clamp(28px, 5vw, 52px);
+        }
+
+        .section-header p {
+            max-width: 62ch;
+        }
+
+        .btn {
+            min-height: 50px;
+            padding: 14px 26px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            letter-spacing: 0.01em;
+            text-transform: none;
+            transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease, background-color 200ms ease;
+        }
+
+        .btn::before,
+        .btn-secondary::after {
+            display: none;
+        }
+
+        .btn-primary {
+            box-shadow: 0 12px 26px rgba(102, 126, 234, 0.28);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(102, 126, 234, 0.34);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+        }
+
+        .feature-card,
+        .industry-card,
+        .value-card,
+        .methodology-card,
+        .pricing-card,
+        .case-study-card,
+        .contact-form {
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 24px rgba(4, 8, 18, 0.2);
+        }
+
+        .feature-card:hover,
+        .industry-card:hover,
+        .value-card:hover,
+        .case-study-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon,
+        .industry-icon,
+        .value-icon,
+        .info-icon {
+            border-radius: 14px;
+        }
+
+        .methodology-grid {
+            gap: var(--space-2xl);
+        }
+
+        .contact-container {
+            gap: var(--space-2xl);
+        }
+
+        .contact-form .btn-primary {
+            width: 100%;
+        }
+
+        .info-item:hover {
+            transform: translateX(4px);
+        }
+
+        .newsletter-form button {
+            min-height: 44px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding: 104px 0 var(--space-3xl);
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-buttons {
+                width: 100%;
+            }
         }

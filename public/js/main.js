@@ -30,9 +30,16 @@ class CustomCursor {
         
         if (!this.cursor || !this.cursorFollower) return;
 
-        if (window.matchMedia('(min-width: 768px)').matches) {
+        const canUseCursor = window.matchMedia('(min-width: 768px) and (pointer: fine)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+            document.body.classList.contains('enable-custom-cursor');
+
+        if (canUseCursor) {
             this.setupEventListeners();
             this.setupInteractiveElements();
+        } else {
+            this.cursor.style.display = 'none';
+            this.cursorFollower.style.display = 'none';
         }
     }
 
@@ -65,12 +72,16 @@ class CustomCursor {
 class ParticleSystem {
     constructor() {
         this.particleCanvas = null;
+        this.intervalId = null;
         this.init();
     }
 
     init() {
         this.particleCanvas = document.querySelector('.particle-canvas');
-        if (this.particleCanvas) {
+        const allowParticles = !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+            window.innerWidth >= 1024;
+
+        if (this.particleCanvas && allowParticles) {
             this.startParticleGeneration();
         }
     }
@@ -108,7 +119,38 @@ class ParticleSystem {
     }
 
     startParticleGeneration() {
-        setInterval(() => this.createParticle(), 500);
+        if (this.intervalId) return;
+        this.intervalId = setInterval(() => this.createParticle(), 1200);
+    }
+}
+
+const DEFAULT_API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : 'https://nhd-api-production.up.railway.app';
+
+function getNhdConfig() {
+    return window.NHD_CONFIG || {};
+}
+
+function normalizeEndpoint(endpoint) {
+    if (!endpoint || typeof endpoint !== 'string') return '';
+    return endpoint.trim().replace(/\/+$/, '');
+}
+
+function getApiBaseUrl() {
+    const config = getNhdConfig();
+    return normalizeEndpoint(config.apiBaseUrl || DEFAULT_API_BASE_URL);
+}
+
+function getErrorMessage(response, fallback) {
+    return response.json()
+        .then(data => data.message || fallback)
+        .catch(() => fallback);
+}
+
+function trackEvent(eventName, payload = {}) {
+    if (window.gtag) {
+        window.gtag('event', eventName, payload);
     }
 }
 
@@ -358,13 +400,90 @@ class FilterController {
  */
 class FormHandler {
     constructor() {
-        this.contactForm = document.querySelector('.contact-form');
+        this.contactForms = document.querySelectorAll('.contact-form');
         this.init();
     }
 
     init() {
-        if (this.contactForm) {
-            this.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.contactForms.forEach(form => {
+            this.ensureStatusElement(form, 'form-status');
+            form.addEventListener('submit', (e) => this.handleSubmit(e, form));
+        });
+    }
+
+    ensureStatusElement(form, className) {
+        let status = form.querySelector(`.${className}`);
+        if (!status) {
+            status = document.createElement('p');
+            status.className = className;
+            status.setAttribute('aria-live', 'polite');
+            form.appendChild(status);
+        }
+        return status;
+    }
+
+    setStatus(statusEl, type, message) {
+        statusEl.textContent = message;
+        statusEl.classList.remove('is-success', 'is-error', 'is-loading');
+        if (type) {
+            statusEl.classList.add(`is-${type}`);
+        }
+    }
+
+    setButtonState(button, loadingText, isLoading) {
+        if (!button) return;
+        if (isLoading) {
+            button.dataset.originalText = button.textContent;
+            button.innerHTML = `<span class="loading"></span> ${loadingText}`;
+            button.disabled = true;
+            return;
+        }
+
+        button.textContent = button.dataset.originalText || button.textContent;
+        button.disabled = false;
+    }
+
+    getContactEndpoints(form) {
+        const config = getNhdConfig();
+        const explicitEndpoint = normalizeEndpoint(form.dataset.endpoint || config.contactEndpoint);
+        const apiEndpoint = `${getApiBaseUrl()}/api/contact`;
+
+        return [explicitEndpoint, apiEndpoint].filter((endpoint, idx, arr) => endpoint && arr.indexOf(endpoint) === idx);
+    }
+
+    async submitJson(endpoint, payload) {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const message = await getErrorMessage(response, 'We could not send your message right now.');
+            throw new Error(message);
+        }
+    }
+
+    async submitNetlifyForm(form, payload) {
+        const data = new URLSearchParams();
+        data.append('form-name', form.getAttribute('name') || 'contact');
+
+        Object.entries(payload).forEach(([key, value]) => {
+            data.append(key, value || '');
+        });
+
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data.toString()
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to submit your message at this time.');
         }
     }
 
@@ -373,37 +492,49 @@ class FormHandler {
      * Provides visual feedback during processing and success states
      * Simulates API call with realistic timing
      */
-    handleSubmit(e) {
+    async handleSubmit(e, form) {
         e.preventDefault();
-        
-        // Get submit button and store original state
-        const submitBtn = this.contactForm.querySelector('.btn-primary');
-        const originalText = submitBtn.textContent;
-        
-        // Show loading state
-        submitBtn.innerHTML = '<span class="loading"></span> Sending...';
-        submitBtn.disabled = true;
-        
-        // Simulate API call with realistic timing (1.5 seconds)
-        setTimeout(() => {
-            // Show success state
-            submitBtn.innerHTML = '✓ Message Sent!';
-            submitBtn.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
-            
-            // Reset form after 2 seconds with success animation
-            setTimeout(() => {
-                this.contactForm.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.style.background = '';
-                submitBtn.disabled = false;
-                
-                // Trigger success animation on form
-                this.contactForm.style.animation = 'pulse-slow 1s ease';
-                setTimeout(() => {
-                    this.contactForm.style.animation = '';
-                }, 1000);
-            }, 2000);
-        }, 1500);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const statusEl = this.ensureStatusElement(form, 'form-status');
+        const formData = new FormData(form);
+
+        const payload = {
+            name: (formData.get('name') || '').toString().trim(),
+            email: (formData.get('email') || '').toString().trim(),
+            company: (formData.get('company') || '').toString().trim(),
+            message: (formData.get('message') || '').toString().trim()
+        };
+
+        this.setStatus(statusEl, 'loading', 'Sending your message...');
+        this.setButtonState(submitBtn, 'Sending...', true);
+
+        try {
+            const endpoints = this.getContactEndpoints(form);
+            let submitted = false;
+
+            for (const endpoint of endpoints) {
+                try {
+                    await this.submitJson(endpoint, payload);
+                    submitted = true;
+                    break;
+                } catch (error) {
+                    // Try the next endpoint before falling back.
+                }
+            }
+
+            if (!submitted) {
+                await this.submitNetlifyForm(form, payload);
+            }
+
+            this.setStatus(statusEl, 'success', 'Thanks. Your request was submitted successfully.');
+            form.reset();
+            trackEvent('contact_submit_success', { form: form.getAttribute('name') || 'contact' });
+        } catch (error) {
+            this.setStatus(statusEl, 'error', error.message || 'Unable to submit your request right now.');
+            trackEvent('contact_submit_error', { form: form.getAttribute('name') || 'contact' });
+        } finally {
+            this.setButtonState(submitBtn, 'Sending...', false);
+        }
     }
 }
 
@@ -453,6 +584,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const filters = new FilterController();
     const forms = new FormHandler();
     const lazyLoading = new LazyLoadingController();
+
+    document.querySelectorAll('.btn.btn-primary').forEach((button) => {
+        button.addEventListener('click', () => {
+            trackEvent('cta_primary_click', {
+                label: button.textContent.trim().slice(0, 80)
+            });
+        });
+    });
     
     // Make controllers available globally for debugging if needed
     if (window.DEBUG) {
@@ -487,51 +626,109 @@ class FooterController {
     }
 
     setupNewsletterForm() {
-        const form = document.getElementById('newsletterForm');
-        if (!form) return;
+        const forms = document.querySelectorAll('.newsletter-form');
+        if (!forms.length) return;
 
-        form.addEventListener('submit', async (e) => {
+        forms.forEach((form) => {
+            this.ensureNewsletterStatus(form);
+            form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const emailInput = document.getElementById('newsletterEmail');
+            const emailInput = form.querySelector('input[type="email"]');
             const submitButton = form.querySelector('button[type="submit"]');
+            const statusEl = form.parentElement.querySelector('.newsletter-status');
             const email = emailInput.value.trim();
 
             if (!email) return;
 
-            // Save original button content
             const originalButtonHTML = submitButton.innerHTML;
 
-            // Show loading state
             submitButton.disabled = true;
             submitButton.innerHTML = '<svg class="spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="32" stroke-dashoffset="32"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/></circle></svg>';
+            statusEl.textContent = 'Submitting...';
+            statusEl.className = 'newsletter-status is-loading';
 
             try {
-                // Simulate API call (replace with actual endpoint)
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                const config = getNhdConfig();
+                const explicitEndpoint = normalizeEndpoint(form.dataset.endpoint || config.newsletterEndpoint);
+                const apiEndpoint = `${getApiBaseUrl()}/api/newsletter/subscribe`;
+                const endpoints = [explicitEndpoint, apiEndpoint].filter((endpoint, idx, arr) => endpoint && arr.indexOf(endpoint) === idx);
 
-                // Success state
+                let subscribed = false;
+                for (const endpoint of endpoints) {
+                    try {
+                        await this.submitNewsletterJson(endpoint, { email });
+                        subscribed = true;
+                        break;
+                    } catch (error) {
+                        // Try next endpoint.
+                    }
+                }
+
+                if (!subscribed) {
+                    await this.submitNewsletterNetlify(form, email);
+                }
+
                 submitButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
                 emailInput.value = '';
-                emailInput.placeholder = 'Thanks for subscribing!';
-
-                // Reset after 3 seconds
-                setTimeout(() => {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonHTML;
-                    emailInput.placeholder = 'Enter your email';
-                }, 3000);
-
+                statusEl.textContent = 'Thanks for subscribing.';
+                statusEl.className = 'newsletter-status is-success';
+                trackEvent('newsletter_subscribe_success');
             } catch (error) {
-                // Error state
                 submitButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
-
+                statusEl.textContent = error.message || 'Unable to subscribe right now.';
+                statusEl.className = 'newsletter-status is-error';
+                trackEvent('newsletter_subscribe_error');
+            } finally {
                 setTimeout(() => {
                     submitButton.disabled = false;
                     submitButton.innerHTML = originalButtonHTML;
-                }, 2000);
+                }, 1200);
             }
         });
+        });
+    }
+
+    ensureNewsletterStatus(form) {
+        if (!form.parentElement.querySelector('.newsletter-status')) {
+            const status = document.createElement('p');
+            status.className = 'newsletter-status';
+            status.setAttribute('aria-live', 'polite');
+            form.insertAdjacentElement('afterend', status);
+        }
+    }
+
+    async submitNewsletterJson(endpoint, payload) {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const message = await getErrorMessage(response, 'Unable to subscribe right now.');
+            throw new Error(message);
+        }
+    }
+
+    async submitNewsletterNetlify(form, email) {
+        const data = new URLSearchParams();
+        data.append('form-name', form.getAttribute('name') || 'newsletter');
+        data.append('email', email);
+
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data.toString()
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to subscribe right now.');
+        }
     }
 }
 
